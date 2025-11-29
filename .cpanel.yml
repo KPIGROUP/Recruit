@@ -1,0 +1,8 @@
+---
+deployment:
+  tasks:
+    # 1) Set the correct deployment path (your domain root)
+    - export DEPLOYPATH=/home/act/public_html/recruitiq.automatedconetruck.com.au
+
+    # 2) Copy ONLY the contents of Laravel's /public into the domain root
+    - /bin/rsync -av --delete ./public/ "$DEPLOYPATH"
