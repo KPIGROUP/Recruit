@@ -1,0 +1,26 @@
+---
+deployment:
+  tasks:
+    # 1) Ensure we’re using PHP 8.3 CLI
+    - export PATH=/opt/cpanel/ea-php83/root/usr/bin:$PATH
+
+    # 2) Quick sanity check (optional, but useful the first time)
+    - php -v
+
+    # 3) Go to the deploy path cPanel uses for this repo
+    - cd $DEPLOYPATH
+
+    # 4) Install/update dependencies for production
+    - composer install --no-dev --optimize-autoloader
+
+    # 5) Run Laravel commands
+    #    Only run key:generate on FIRST deploy (after that, comment it out)
+    - php artisan key:generate --force
+
+    # 6) Run database migrations
+    - php artisan migrate --force
+
+    # 7) Warm up caches
+    - php artisan config:cache
+    - php artisan route:cache
+    - php artisan view:cache
